@@ -15,13 +15,13 @@ class CreatePricingRulesTable extends Migration
     {
         Schema::create('pricing_rules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('car_id')->constrained()->onDelete('cascade');
+            $table->foreignId('car_id')->constrained()->onDelete('cascade')->index();
             $table->unsignedBigInteger('price_per_hour');
             $table->unsignedBigInteger('price_per_day');
             $table->unsignedBigInteger('price_per_week');
             $table->unsignedBigInteger('price_per_month');
-            $table->unsignedBigInteger('weekend_multiplier');
-            $table->unsignedBigInteger('holiday_multiplier');
+            $table->decimal('weekend_multiplier', 5, 2)->default(1.00);
+            $table->decimal('holiday_multiplier', 5, 2)->default(1.00);
             $table->timestamps();
         });
     }

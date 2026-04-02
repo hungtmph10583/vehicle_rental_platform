@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Route::prefix('users')->group(function () {
+//     Route::get('/', [UserController::class, 'index'])->name('api.user.index');
+//     Route::post('/', [UserController::class, 'store'])->name('api.user.store');
+//     Route::get('/{id}', [UserController::class, 'show'])->name('api.user.show');
+//     Route::patch('/{id}', [UserController::class, 'update'])->name('api.user.update');
+//     Route::delete('{id}/destroy', [UserController::class, 'destroy'])->name('api.user.destroy');
+//     Route::post('{id}/recover', [UserController::class, 'recover'])->name('api.user.recover');
+// });

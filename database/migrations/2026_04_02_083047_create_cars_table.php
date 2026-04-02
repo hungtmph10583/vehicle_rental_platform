@@ -20,7 +20,7 @@ class CreateCarsTable extends Migration
             $table->string('model');
             $table->year('year');
             $table->string('image_url');
-            $table->string('color');
+            $table->string('color',50)->nullable();
             $table->string('license_plate')->unique(); // Bien so xe
             $table->tinyInteger('seats')->default(4); 
 
