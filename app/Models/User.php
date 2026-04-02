@@ -19,8 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'avatar',
+        'status',
     ];
 
     /**
@@ -41,4 +44,28 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // ---- RELATIONSHIP -----
+    public function bookings() { return $this->hasMany(Booking::class)->latest(); }
+    // ** payment - quan he gian tiep thong qua booking
+    public function payments() { return $this->hasManyThrough(Payment::class, Booking::class); }
+    public function reviews() { return $this->hasMany(Review::class); }
+    public function promotionUsages() { return $this->hasMany(PromotionUsage::class); }
+
+    // public function notifications() {
+    //     return $this->hasMany(Notification::class)->latest();
+    // }
+
+    // ---- RELATIONSHIP -----
+
+    public function scopeSearch($query, $keyword)
+    {
+        return $query->when($keyword, function ($q) use ($keyword) {
+            $q->where(function ($sub) use ($keyword) {
+                $sub->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('email', 'like', "%{$keyword}%")
+                    ->orWhere('phone', 'like', "%{$keyword}%");
+            });
+        });
+    }
 }
