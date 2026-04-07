@@ -9,10 +9,15 @@ class Brand extends Model
 {
     use HasFactory;
     protected $fillable = ['name','slug','logo','description'];
+    
     public function cars() { return $this->hasMany(Car::class); }
 
-    public function scopeSearch($query, $keyword)
+    public function scopeSearch($query)
     {
+        $keyword = request()->search;
+        if (!$keyword) {
+            return $query;
+        }
         return $query->where('name','like',"%{$keyword}%")->orWhere('slug','like',"%{$keyword}%");
     }
 }

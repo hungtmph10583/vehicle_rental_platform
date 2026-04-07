@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\BrandController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,3 +28,24 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     Route::delete('{id}/destroy', [UserController::class, 'destroy'])->name('api.user.destroy');
 //     Route::post('{id}/recover', [UserController::class, 'recover'])->name('api.user.recover');
 // });
+
+Route::group(['as' => 'api.'], function () {
+
+    Route::group(['as' => 'user.'], function () {
+        Route::prefix('users')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('index');
+            Route::post('/', [UserController::class, 'store'])->name('store');
+            Route::get('/{id}', [UserController::class, 'show'])->name('show');
+            Route::patch('/{id}', [UserController::class, 'update'])->name('update');
+            Route::delete('{id}/destroy', [UserController::class, 'destroy'])->name('destroy');
+            Route::post('{id}/recover', [UserController::class, 'recover'])->name('recover');
+        });
+    });
+
+    Route::group(['as' => 'brand.'], function () {
+        Route::prefix('brands')->group(function () {
+            Route::get('/', [BrandController::class, 'index'])->name('index');
+            Route::delete('{id}/', [BrandController::class, 'destroy'])->name('destroy');
+        });
+    });
+});
