@@ -24,11 +24,12 @@ class BrandRequest extends FormRequest
      */
     public function rules()
     {
-        $brand = $this->route('id');
-        // dd('V: '.$brand);
         return [
             'name' => 'required|string|max:255',
-            'slug' => ['string', 'max:255', Rule::unique('brands', 'slug')->ignore($brand)],
+            'slug' => [
+                'max:255',
+                Rule::unique('brands', 'slug')->ignore($this->id),
+            ],
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ];
     }
@@ -38,6 +39,7 @@ class BrandRequest extends FormRequest
         return [
             'name.required' => 'Nhập vào tên Hãng xe.',
             'name.string'   => 'Nhập vào kí tự chuỗi.',
+            'name.max'      => 'Độ dài không quá 255 kí tự.',
             'name.max'      => 'Độ dài không quá 255 kí tự.',
             'slug.unique'   => 'Đường đẫn tĩnh này đã tồn tại.',
             'logo.image'    => 'Logo phải là hình ảnh.',

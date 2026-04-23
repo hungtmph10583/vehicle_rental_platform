@@ -18,15 +18,13 @@ class CreateCarsTable extends Migration
             $table->foreignId('brand_id')->constrained('brands')->onDelete('cascade');
             $table->foreignId('car_type_id')->constrained()->onDelete('cascade');
             $table->string('model');
+            $table->string('slug')->unique()->nullable();
             $table->year('year');
             $table->string('image_url');
             $table->string('color',50)->nullable();
             $table->string('license_plate')->unique(); // Bien so xe
             $table->tinyInteger('seats')->default(4); 
 
-            // $table->tinyInteger('transmission', 4)->default(1); // 1='auto', 2='manual'
-            // $table->tinyInteger('fuel_type', 4)->default(1); // 1='gasoline',2='diesel',3='electric'
-            // $table->tinyInteger('status', 4)->default(1); // 1='available',2='booked',3='maintenance'
             $table->enum('transmission', ['auto', 'manual'])->default('auto');
             $table->enum('fuel_type', ['gasoline', 'diesel', 'electric'])->default('gasoline');
             $table->decimal('fuel_consumption', 5, 2)->nullable();

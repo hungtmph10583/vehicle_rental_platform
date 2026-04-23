@@ -14,8 +14,10 @@ class CreateCarImagesTable extends Migration
     public function up()
     {
         Schema::create('car_images', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('car_id')->constrained()->onDelete('cascade');
             $table->string('image_url');
+            $table->tinyInteger('order_no')->nullable(); 
         });
     }
 

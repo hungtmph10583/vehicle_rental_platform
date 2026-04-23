@@ -44,7 +44,7 @@
                         <div class="row m--margin-bottom-20">
                             <div class="col-lg-4 m--margin-bottom-10-tablet-and-mobile">
                                 <label>Search:</label>
-                                <input type="text" class="form-control m-input" placeholder="Áo len" name="search" value="{{ isset(request()->search) ? request()->search : '' }}">
+                                <input type="text" class="form-control m-input" placeholder="Keyword" name="keyword" value="{{ isset(request()->keyword) ? request()->keyword : '' }}">
                             </div>
                             <div class="col-lg-4 m--margin-bottom-10-tablet-and-mobile">
                                 <label>Hãng Xe:</label>
@@ -85,7 +85,7 @@
                                         <span>Search</span>
                                     </span>
                                 </button> &nbsp;&nbsp;
-                                <a href="{{ route('backend.car.index') }}" class="btn btn-secondary m-btn m-btn--icon {{ !request('search') && !request('code') && !request('brand') && !request('status') && !request('ecmfl') ? 'disabled' : '' }}" id="m_reset">
+                                <a href="{{ route('backend.car.index') }}" class="btn btn-secondary m-btn m-btn--icon {{ !request('keyword') && !request('brand') && !request('status') && !request('status') && !request('car_type') ? 'disabled' : '' }}" id="m_reset">
                                     <span>
                                         <i class="la la-close"></i>
                                         <span>Reset</span>
@@ -116,10 +116,7 @@
                                     <th data-field="Car" class="m-datatable__cell m-datatable__cell--sort">
                                         <span style="width: 250px;">THÔNG TIN</span>
                                     </th>
-                                    <th data-field="Code" class="m-datatable__cell m-datatable__cell--sort">
-                                        <span style="width: 110px;">MÃ</span>
-                                    </th>
-                                    <th data-field="E-Commerce" class="m-datatable__cell m-datatable__cell--sort">
+                                    <th data-field="E-Commerce" class="m-datatable__cell m-datatable__cell--sort text-center">
                                         <span style="width: 150px;">HÃNG XE</span>
                                     </th>
                                     <th data-field="Status" class="m-datatable__cell m-datatable__cell--sort">
@@ -152,15 +149,10 @@
                                             </span>
                                         </span>
                                     </td>
-                                    <td data-field="Code" class="m-datatable__cell">
-                                        <span class="d-inline-block text-truncate" style="width: 110px;" class="text-bold">
-                                            <span class="text-capitalize m--font-boldest">{{ $item->code }}</span>
-                                        </span>
-                                    </td>
                                     <td data-field="Type" class="m-datatable__cell">
-                                        <span style="width: 150px;">
-                                            <img src="{{ asset( $item->brand->logo )}}" class="m--img-rounded m--marginless" style="width: 35px; height: 35px; overflow: hidden; object-fit: cover;" alt="" />
-                                            <span class="text-capitalize m--font-boldest pl-2">{{ $item->brand->name }}</span>
+                                        <span style="width: 150px;" class="text-center">
+                                            <img src="{{ asset( $item->brand->logo )}}" class="m--img-rounded m--marginless" style="width: 40px; height: auto; overflow: hidden; object-fit: cover;" alt="{{ $item->brand->name }}" />
+                                            <p class="text-capitalize m--font-boldest pl-2">{{ $item->brand->name }}</p>
                                         </span>
                                     </td>
                                     <td data-field="Status" class="m-datatable__cell">
@@ -175,9 +167,10 @@
                                                     Actions
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
-                                                    <a class="dropdown-item" href="{{ route('backend.car.show', [$item->id]) }}" title="Edit">Preview</a>
+                                                    <a class="dropdown-item" href="{{ route('backend.car.show', [$item->id]) }}" title="Preview">Preview</a>
                                                     <a class="dropdown-item" href="{{ route('backend.car.edit', [$item->id]) }}" title="Edit">Edit</a>
-                                                    @can('delete car')
+                                                    <a class="dropdown-item" href="{{ route('backend.car.destroy', [$item->id]) }}" title="Delete">Delete</a>
+                                                    @can('delete cars')
                                                     <a class="dropdown-item destroy_car" href="javascript:void(0);" data-url="{{ route('api.car.destroy', [$item->id]) }}" title="Delete">Delete</a>
                                                     @endcan
                                                 </div>
@@ -247,9 +240,9 @@
 
         $('#status').change(function() { $('#m_search').click(); })
 
-        $('#ecmfl').change(function() { $('#m_search').click(); })
+        $('#brand').change(function() { $('#m_search').click(); })
 
-        $('#has_report').change(function() { $('#m_search').click(); })
+        $('#car_type').change(function() { $('#m_search').click(); })
 
         let carIds = [];
 
@@ -283,7 +276,7 @@
         //     console.log('send request')
         //     $.ajax({
         //         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        //         url: `{{ route('api.group.store') }}`,
+        //         url: `{{ route('api.brand.index') }}`,
         //         type: 'POST',
         //         dataType: 'json',
         //         data: {name:name, slug:slug, carIds:carIds},

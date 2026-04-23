@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Arr;
 
 class Car extends Model
 {
     use HasFactory;
-    protected $fillable = ['brand_id','model','year','image_url','color','license_plate','seats','car_type_id','transmission','fuel_type','fuel_consumption','mileage','status','description'];
+    protected $fillable = ['brand_id','car_type_id','model','slug','year','image_url','color','license_plate','seats','transmission','fuel_type','fuel_consumption','mileage','status','description'];
 
     const TRANSMISSION_AUTO     = 'auto';
     const TRANSMISSION_MANUAL   = 'manual';
@@ -23,6 +24,26 @@ class Car extends Model
     const STATUS_AVAILABLE  = 'available';
     const STATUS_BOOKED     = 'booked';
     const STATUS_MAINTENANCE= 'maintenance';
+
+    public $arr_status = [
+        self::STATUS_AVAILABLE => [
+            'name' => 'Sẵn có',
+            'class'=> 'success'
+        ],
+        self::STATUS_BOOKED => [
+            'name' => 'Đang cho thuê',
+            'class'=> 'focus'
+        ],
+        self::STATUS_MAINTENANCE => [
+            'name' => 'Đang bảo dưỡng',
+            'class'=> 'warning'
+        ],
+    ];
+
+    public function getStatus()
+    {
+        return Arr::get($this->arr_status, $this->status, []);
+    }
 
     // --- RELATIONSHIP ---
     public function brand() { return $this->belongsTo(Brand::class); }
@@ -38,17 +59,19 @@ class Car extends Model
     // --- Scope Search ---
     public function scopeSearch($query, $params)
     {
-        return $query
-            ->when($params['brand_id'] ?? null, function ($q, $brandId) {
+        $return = $query
+            ->when($params->brand ?? null, function ($q, $brandId) {
                 $q->where('brand_id', $brandId);
             })
             ->when($params['keyword'] ?? null, function ($q, $keyword) {
                 $q->whereHas('brand', function ($sub) use ($keyword) {
-                    $sub->where('name', 'like', "%{$keyword}%");
+                    $sub->where('model', 'like', "%{$keyword}%");
                 });
             })
             ->when($params['seats'] ?? null, fn($q, $seats) => $q->where('seats', $seats))
-            ->where('status', 'available');
+            ->when($params['status'] ?? null, fn($q, $status) => $q->where('status', $status));
+
+        return $return;
     }
 
     // --- ACCESSORS (Thuộc tính ảo) ---

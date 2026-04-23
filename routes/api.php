@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\BrandController;
+use App\Http\Controllers\Backend\CarController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,13 @@ Route::group(['as' => 'api.'], function () {
         Route::prefix('brands')->group(function () {
             Route::get('/', [BrandController::class, 'index'])->name('index');
             Route::delete('{id}/', [BrandController::class, 'destroy'])->name('destroy');
+        });
+    });
+
+    Route::group(['as' => 'car.'], function () {
+        Route::prefix('cars')->group(function () {
+            Route::post('update-image', [CarController::class, 'upload_image_url'])->name('upload_image_url');
+            Route::delete('delete/car_image', [CarController::class, 'deleteCarImage'])->name('delete_car_image');
         });
     });
 });
