@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\BookingController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CarController;
 use Illuminate\Support\Facades\Route;
@@ -63,10 +64,28 @@ Route::group(['as' => 'backend.'], function () {
             Route::get('create', [CarController::class, 'create'])->name('create');
             Route::post('create', [CarController::class, 'store']);
 
+            Route::get('show', [CarController::class, 'show'])->name('show');
+
             Route::get('{id}/edit', [CarController::class, 'edit'])->name('edit');
             Route::post('{id}/edit', [CarController::class, 'update']);
 
-            Route::delete('{id}/destroy', [CarController::class, 'destroy'])->name('destroy');
+            Route::get('{id}/destroy', [CarController::class, 'destroy'])->name('destroy');
+        });
+    });
+
+    Route::group(['as' => 'booking.'], function () {
+        Route::prefix('bookings')->group(function () {
+            Route::get('/', [BookingController::class, 'index'])->name('index');
+
+            Route::get('create', [BookingController::class, 'create'])->name('create');
+            Route::post('create', [BookingController::class, 'store']);
+
+            Route::get('show', [BookingController::class, 'show'])->name('show');
+
+            Route::get('{id}/edit', [BookingController::class, 'edit'])->name('edit');
+            Route::post('{id}/edit', [BookingController::class, 'update']);
+
+            Route::get('{id}/destroy', [BookingController::class, 'destroy'])->name('destroy');
         });
     });
 

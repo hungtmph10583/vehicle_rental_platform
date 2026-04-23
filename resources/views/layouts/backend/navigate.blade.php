@@ -15,8 +15,28 @@
                 </a>
             </li>
             <li class="m-menu__section ">
-                <h4 class="m-menu__section-text">Crawler</h4>
+                <h4 class="m-menu__section-text">QUẢN LÝ</h4>
                 <i class="m-menu__section-icon flaticon-more-v2"></i>
+            </li>
+            <li class="m-menu__item  {{ isset($activeBooking) ? 'm-menu__item--active' : '' }}" aria-haspopup="true">
+                <a href="#" class="m-menu__link ">
+                    <i class="m-menu__link-icon la la-check-square-o"></i>
+                    <span class="m-menu__link-title">
+                        <span class="m-menu__link-wrap">
+                            <span class="m-menu__link-text">Danh Sách Đặt Xe</span>
+                        </span>
+                    </span>
+                </a>
+            </li>
+            <li class="m-menu__item  {{ isset($activeBooking) ? 'm-menu__item--active' : '' }}" aria-haspopup="true">
+                <a href="#" class="m-menu__link ">
+                    <i class="m-menu__link-icon la la-money"></i>
+                    <span class="m-menu__link-title">
+                        <span class="m-menu__link-wrap">
+                            <span class="m-menu__link-text">Thanh Toán</span>
+                        </span>
+                    </span>
+                </a>
             </li>
             <li class="m-menu__section ">
                 <h4 class="m-menu__section-text">SẢN PHẨM</h4>
@@ -25,7 +45,7 @@
             <li class="m-menu__item  m-menu__item--submenu {{ isset($activeCarParent) ? 'm-menu__item--open' : '' }}" aria-haspopup="true" m-menu-submenu-toggle="hover">
                 <a href="javascript:;" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon flaticon-layers"></i>
-                    <span class="m-menu__link-text">Quản Lý</span>
+                    <span class="m-menu__link-text">Quản Lý Xe</span>
                     <i class="m-menu__ver-arrow la la-angle-right"></i>
                 </a>
                 <div class="m-menu__submenu "><span class="m-menu__arrow"></span>

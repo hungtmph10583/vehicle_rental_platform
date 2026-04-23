@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
-@section('title', 'List of groups')
-@section('subheader__title', 'Group')
+@section('title', 'Booking')
+@section('subheader__title', 'Booking')
 @section('subheader__breadcrumbs')
     <li class="m-nav__item m-nav__item--home">
         <a href="{{route('backend.dashboard')}}" class="m-nav__link m-nav__link--icon">
@@ -9,7 +9,7 @@
     </li>
     <li class="m-nav__separator">-</li>
     <li class="m-nav__item">
-        <span class="m-nav__link-text">List of groups</span>
+        <span class="m-nav__link-text">Booking</span>
     </li>
 @endsection
 @section('content')
@@ -21,17 +21,17 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
-                                Groups ({{ $groups_count ?? 0 }})
+                                Bookings ({{ $bookings_count ?? 0 }})
                             </h3>
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
-                                <a href="{{route('backend.group.create')}}" class="btn btn-primary m-btn m-btn--icon">
+                                <a href="{{route('backend.booking.create')}}" class="btn btn-primary m-btn m-btn--icon">
                                     <span>
                                         <i class="la la-plus"></i>
-                                        <span>Add group</span>
+                                        <span>Add booking</span>
                                     </span>
                                 </a>
                             </li>
@@ -58,7 +58,7 @@
                                 </tr>
                             </thead>
                             <tbody class="m-datatable__body">
-                                @foreach($groups as $item)
+                                @foreach($bookings as $item)
                                 <tr class="m-datatable__row" style="left: 0px;">
                                     <td class="m-datatable__cell">
                                         <span class="d-inline-block text-truncate" style="width: 140px;">
@@ -86,8 +86,8 @@
                                                     Actions
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu2" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 40px, 0px);">
-                                                    <a class="dropdown-item" href="{{ route('backend.group.edit', [$item->id]) }}">Edit</a>
-                                                    <a class="dropdown-item destroy-group" href="javascript:void(0);" data-href="{{ route('backend.group.destroy', [$item->id]) }}" data-id="{{ $item->id }}" title="Delete">Delete</a>
+                                                    <a class="dropdown-item" href="{{ route('backend.booking.edit', [$item->id]) }}">Edit</a>
+                                                    <a class="dropdown-item destroy-booking" href="javascript:void(0);" data-href="{{ route('backend.booking.destroy', [$item->id]) }}" data-id="{{ $item->id }}" title="Delete">Delete</a>
                                                 </div>
                                             </div>
                                         </span>
@@ -97,7 +97,7 @@
                             </tbody>
                         </table>
                         <div class="m-datatable__pager m-datatable--paging-loaded clearfix">
-                            {{ $groups->links('layouts.backend.pagination') }}
+                            {{ $bookings->links('layouts.backend.pagination') }}
                         </div>
                     </div>
 					
@@ -108,63 +108,10 @@
     <!--End::Section-->
 </div>
 @endsection
-@section('pagejs')
+@section('script')
 <script>
     $(document).ready(function() {
-        $(document).on('click', '.destroy-group', function (e) {
-            let url = $(this).data('href');
-            let locationCard = $(this);
-            let groupId = $(this).data('id');
-            swal({
-                title:"Are you sure?",
-                text:"You won't be able to revert this group!",
-                type:"warning",showCancelButton:!0,
-                confirmButtonText:"Yes, delete this group!"
-            }).then(function(result){
-                if (result.value == true) {
-                    // const _token = $("input[name='_token']").val();
-                    $.ajax({
-                        url: "{{ route('backend.group.index') }}",
-                        type: 'DELETE',
-                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                        success: function(response){
-                            console.log(response)
-                            if (response.success) { locationCard.parents("tr").remove(); }
-                            // if (response.alert) { swal({position:"top-right",type:response.alert.type,title:response.alert.title,showConfirmButton:!1,timer:1500})}
-                        },
-                        error: function(){
-                            swal("Has Error!","An error occurred while deleting the group.","warning")
-                        }
-                    });
-                }
-            })
-        });
-
-        let searchTimer;
-        function performSearch() {
-            let query  = $('#search-input').val();
-            let status = $('#status-select').val();
-            let limit  = $('#limit-select').val();
-            $.ajax({
-                url: "{{ route('backend.group.index') }}",
-                type: "GET",
-                data: { 'query': query, 'status': status, 'limit': limit },
-                success: function(data) {
-                    $('#search-results').html('');
-                    data.forEach(function(product) {
-                        $('#search-results').append('<p>' + product.name + ' - ' + product.status + '</p>');
-                    }); 
-                } 
-            }); 
-        }
-        $('#search-input').on('input', function() {
-            clearTimeout(searchTimer);
-            searchTimer = setTimeout(performSearch, 300); 
-        });
-        $('#status-select').on('change', function() { performSearch(); });
-        $('#limit-select').on('change', function() { performSearch(); });
         
-        // $('#cancel').on('click', function() { performSearch(); });
     });
 </script>
 @endsection

@@ -105,19 +105,25 @@
 @section('script')
 <script src="{{ asset('theme/backend/assets/demo/default/custom/crud/forms/widgets/bootstrap-select.js')}}" type="text/javascript"></script>
 <script>
-    const uploadImage = $('#uploadImage');
-    const preImage = $('#preImage');
+    $(document).ready(function() {
+        const uploadImage = $('#uploadImage');
+        const preImage = $('#preImage');
 
-    uploadImage.change(function (e) {
-        file = this.files[0];
-        
-        if (e.target.files.length) {
-            let reader = new FileReader();
-            reader.onload = function (event) {
-                preImage.attr("src", event.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
+        preImage.on('click', function() {
+            uploadImage.click();
+        });
+
+        uploadImage.change(function (e) {
+            file = this.files[0];
+            
+            if (e.target.files.length) {
+                let reader = new FileReader();
+                reader.onload = function (event) {
+                    preImage.attr("src", event.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     });
 </script>
 @endsection

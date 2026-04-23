@@ -45,7 +45,9 @@ class BrandController extends Controller
     {
         is_null($request->slug) ? $slug = $this->sluggable($request->name) : $slug = $this->sluggable($request->slug);
 
-        if ($request->hasFile('logo')) { $logo = $this->imageService->upload($request->logo, 'brands', $slug); }
+        $logo = $request->hasFile('logo') 
+            ? $this->imageService->upload($request->file('logo'), 'brands', $slug)
+            : "https://placehold.co/200x200?text={$slug}";
 
         Brand::create([
             'name' => $request->name,
@@ -119,10 +121,5 @@ class BrandController extends Controller
             $currentSlug = $originalSlug . '-' . $count++;
         }
         return $currentSlug;
-    }
-
-    public function uploadFileImage($fileImage, $slug)
-    {
-        return 'storage/' . $fileImage->storeAs('uploads/brands', uniqid() . '-' . $slug . '.' . $fileImage->getClientOriginalExtension());
     }
 }

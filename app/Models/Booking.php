@@ -20,9 +20,24 @@ class Booking extends Model
     protected static function booted()
     {
         static::creating(function ($booking) {
+            // Tu dong tao ma booking_code
+            $booking->booking_code = self::generateUniqueCode();
+        });
+
+        static::creating(function ($booking) {
             // Tự động tính total_price trước khi lưu
             $booking->total_price = $booking->subtotal - $booking->discount_amount;
         });
+    }
+
+    public function generateUniqueCode()
+    {
+        $characters = '23456789ABCDEFGHJKLMNPQRSTWXYZ';
+        do {
+            $code = substr(str_shuffle(str_repeat($characters, 6)), 0, 6);
+        } while (self::where('booking_code', $code)->exists());
+
+        return $code;
     }
 
     public function scopeFilter($query, $filters)
